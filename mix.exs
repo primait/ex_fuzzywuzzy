@@ -15,12 +15,18 @@ defmodule ExFuzzywuzzy.MixProject do
       docs: docs(),
       aliases: aliases(),
       package: package(),
-      description: "Fuzzy string matching",
+      description: "A fuzzy string matching library",
       dialyzer: [
         plt_add_apps: [:mix],
         plt_add_deps: :transitive,
         ignore_warnings: ".dialyzerignore"
       ]
+    ]
+  end
+
+  def application do
+    [
+      extra_applications: [:logger]
     ]
   end
 
@@ -32,9 +38,17 @@ defmodule ExFuzzywuzzy.MixProject do
     ]
   end
 
-  def project do
+  defp deps do
     [
-      elixirc_paths: elixirc_paths(Mix.env()),
+      {:levenshtein, "~> 0.3.0"}
+    ] ++ deps_dev()
+  end
+
+  defp deps_dev() do
+    [
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.23", only: :dev}
     ]
   end
 
@@ -45,16 +59,6 @@ defmodule ExFuzzywuzzy.MixProject do
       source_url: @source_url,
       extras: ["README.md", "CONTRIBUTING.md"]
     ]
-  end
-
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
-
-  defp deps do
-    []
   end
 
   defp aliases do
@@ -69,7 +73,7 @@ defmodule ExFuzzywuzzy.MixProject do
       ],
       "format.all": [
         "format mix.exs \"lib/**/*.{ex,exs}\" \"test/**/*.{ex,exs}\" \"priv/**/*.{ex,exs}\" \"config/**/*.{ex,exs}\""
-      ],
+      ]
     ]
   end
 end
