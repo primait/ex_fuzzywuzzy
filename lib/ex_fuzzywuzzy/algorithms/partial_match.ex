@@ -25,15 +25,15 @@ defmodule ExFuzzywuzzy.Algorithms.PartialMatch do
   def matching_blocks(left, right) do
     {left_length, right_length} = {String.length(left), String.length(right)}
 
-    # left string should be the shortest
-    {left, right, left_length, right_length} =
+    # first string should be the shortest
+    {first, second, first_length, second_length} =
       if right_length < left_length,
         do: {right, left, right_length, left_length},
         else: {left, right, left_length, right_length}
 
     []
-    |> do_matching_blocks(left, right, {0, left_length}, {0, right_length})
-    |> Enum.concat([{left, String.slice(right, right_length - left_length, left_length)}])
+    |> do_matching_blocks(first, second, {0, first_length}, {0, second_length})
+    |> Enum.concat([{first, String.slice(second, second_length - first_length, first_length)}])
   end
 
   @spec do_matching_blocks([{String.t(), String.t()}], String.t(), String.t(), slice(), slice()) :: [
