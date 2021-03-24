@@ -2,8 +2,8 @@ defmodule ExFuzzywuzzyTest do
   use ExUnit.Case
   doctest ExFuzzywuzzy, import: true
 
-  alias ExFuzzywuzzy.Similarity.JaroWinkler
   import ExFuzzywuzzy
+  alias ExFuzzywuzzy.Similarity.JaroWinkler
 
   test "standard ratio full match" do
     assert ratio("new york mets", "new york mets", case_sensitive: true) == 100.0
