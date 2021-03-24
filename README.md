@@ -29,8 +29,50 @@ end
 ## Usage
 <!--MDOC !-->
 
-**TODO: Add Usage**
+Choose the ratio function which fits best your needs among the available, 
+providing the two strings to be matched and - if needed - overwriting options 
+over the configured ones.
 
+Available methods are:
+- Simple ratio
+- Quick ratio
+- Partial ratio
+- Token sort ratio
+- Partial token sort ratio
+- Token set ratio
+- Partial token set ratio
+- Best score ratio
+
+Available options are:
+- Similarity function (Levenshtein and Jaro-Winkler provided in library)
+- Case sensitiveness of match
+- Decimal precision of output score
+
+Here are some examples.
+
+### Simple ratio
+```elixir
+iex> ExFuzzywuzzy.ratio("this is a test", "this is a test!")
+96.55
+```
+
+### Quick ratio
+```elixir
+iex> ExFuzzywuzzy.quick_ratio("this is a test", "this is a test!")
+100.0
+```
+
+### Partial ratio
+```elixir
+iex> ExFuzzywuzzy.partial_ratio("this is a test", "this is a test!")
+100.0
+```
+
+### Best Score ratio
+```elixir
+iex> ExFuzzywuzzy.best_score_ratio("this is a test", "this is a test!")
+{:quick, 100.0}
+```
 <!--MDOC !-->
 
 ## Contributing
