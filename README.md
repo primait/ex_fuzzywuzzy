@@ -13,7 +13,7 @@ ExFuzzyWuzzy is a fuzzy string matching library that provides many ways of calcu
 a matching ratio between two strings, starting from a similarity function which can be
 based on Levenshtein or Jaro-Winkler or a custom one.
 
-The library is an Elixir porting of SeatGeek's [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy).
+The library is an Elixir port of SeatGeek's [fuzzywuzzy](https://github.com/seatgeek/fuzzywuzzy).
 
 ## Installation
 
