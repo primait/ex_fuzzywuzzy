@@ -12,10 +12,25 @@ defmodule ExFuzzywuzzy do
   }
   """
 
+  import ExFuzzywuzzy.Algorithms.PartialMatch
+
+  @typedoc """
+  Ratio calculator-like signature
+  """
+  @type ratio_calculator :: (String.t(), String.t() -> float())
+
+  @typedoc """
+  Configurable runtime option types
+  """
+  @type fuzzywuzzy_option ::
+          {:similarity_fn, ratio_calculator()}
+          | {:case_sensitive, boolean()}
+          | {:precision, non_neg_integer()}
+
   @typedoc """
   Configurable runtime options for ratio
   """
-  @type option :: :similarity_fn | :case_sensitive | :precision
+  @type fuzzywuzzy_options :: [fuzzywuzzy_option()]
 
   @typedoc """
   Ratio methods available that match the full string
@@ -32,13 +47,6 @@ defmodule ExFuzzywuzzy do
   """
   @type match_method :: full_match_method() | partial_match_method()
 
-  @typedoc """
-  Ratio calculator-like signature
-  """
-  @type ratio_calculator :: (String.t(), String.t() -> float())
-
-  import ExFuzzywuzzy.Algorithms.PartialMatch
-
   @doc """
   Calculates the standard ratio between two strings as a percentage.
   It demands the calculus to the chosen measure, standardizing the produced output
@@ -48,7 +56,7 @@ defmodule ExFuzzywuzzy do
   96.55
   ```
   """
-  @spec ratio(String.t(), String.t(), Keyword.t()) :: float()
+  @spec ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def ratio(left, right, options \\ []) do
     apply_ratio(left, right, &do_ratio/3, options)
   end
@@ -64,17 +72,17 @@ defmodule ExFuzzywuzzy do
   100.0
   ```
   """
-  @spec quick_ratio(String.t(), String.t(), Keyword.t()) :: float()
+  @spec quick_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def quick_ratio(left, right, options \\ []) do
     left
-    |> quick_ratio_normalizer
+    |> quick_ratio_normalizer()
     |> apply_ratio(quick_ratio_normalizer(right), &do_ratio/3, options)
   end
 
   @spec quick_ratio_normalizer(String.t()) :: String.t()
   defp quick_ratio_normalizer(string) do
     string
-    |> string_normalizer
+    |> string_normalizer()
     |> Enum.join(" ")
   end
 
@@ -90,7 +98,7 @@ defmodule ExFuzzywuzzy do
   100.0
   ```
   """
-  @spec partial_ratio(String.t(), String.t(), Keyword.t()) :: float()
+  @spec partial_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def partial_ratio(left, right, options \\ []) do
     apply_ratio(left, right, &do_partial_ratio/3, options)
   end
@@ -115,7 +123,7 @@ defmodule ExFuzzywuzzy do
   79.55
   ```
   """
-  @spec token_sort_ratio(String.t(), String.t(), Keyword.t()) :: float()
+  @spec token_sort_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def token_sort_ratio(left, right, options \\ []) do
     apply_ratio(left, right, &do_token_sort_ratio/3, options)
   end
@@ -123,14 +131,14 @@ defmodule ExFuzzywuzzy do
   @spec do_token_sort_ratio(String.t(), String.t(), ratio_calculator()) :: float()
   defp do_token_sort_ratio(left, right, ratio_fn) do
     left
-    |> token_sort_normalizer
+    |> token_sort_normalizer()
     |> ratio_fn.(token_sort_normalizer(right))
   end
 
   @spec token_sort_normalizer(String.t()) :: String.t()
   defp token_sort_normalizer(string) do
     string
-    |> string_normalizer
+    |> string_normalizer()
     |> Enum.sort()
     |> Enum.join(" ")
   end
@@ -146,7 +154,7 @@ defmodule ExFuzzywuzzy do
   90.63
   ```
   """
-  @spec partial_token_sort_ratio(String.t(), String.t(), Keyword.t()) :: float()
+  @spec partial_token_sort_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def partial_token_sort_ratio(left, right, options \\ []) do
     apply_ratio(left, right, &do_partial_token_sort_ratio/3, options)
   end
@@ -169,7 +177,7 @@ defmodule ExFuzzywuzzy do
   81.58
   ```
   """
-  @spec token_set_ratio(String.t(), String.t(), Keyword.t()) :: float()
+  @spec token_set_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def token_set_ratio(left, right, options \\ []), do: apply_ratio(left, right, &do_token_set_ratio/3, options)
 
   @spec do_token_set_ratio(String.t(), String.t(), ratio_calculator()) :: float()
@@ -200,7 +208,7 @@ defmodule ExFuzzywuzzy do
   @spec token_set_normalizer(String.t()) :: MapSet.t()
   defp token_set_normalizer(string) do
     string
-    |> string_normalizer
+    |> string_normalizer()
     |> MapSet.new()
   end
 
@@ -227,20 +235,20 @@ defmodule ExFuzzywuzzy do
   65.63
   ```
   """
-  @spec partial_token_set_ratio(String.t(), String.t(), Keyword.t()) :: float()
+  @spec partial_token_set_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def partial_token_set_ratio(left, right, options \\ []) do
     apply_ratio(left, right, &do_partial_token_set_ratio/3, options)
   end
 
   @spec do_partial_token_set_ratio(String.t(), String.t(), ratio_calculator()) :: float()
-  defp do_partial_token_set_ratio(left, right, _ratio_fn) do
+  defp do_partial_token_set_ratio(left, right, _) do
     do_token_set_ratio(left, right, fn a, b -> partial_ratio(a, b) / 100 end)
   end
 
   @doc """
   Calculates the ratio between the strings using various methods, returning the best score and algorithm
   """
-  @spec best_score_ratio(String.t(), String.t(), boolean(), Keyword.t()) :: {match_method(), float()}
+  @spec best_score_ratio(String.t(), String.t(), boolean(), fuzzywuzzy_options()) :: {match_method(), float()}
   def best_score_ratio(left, right, partial \\ false, options \\ []) do
     [
       {:standard, &ratio/3},
@@ -264,21 +272,31 @@ defmodule ExFuzzywuzzy do
   end
 
   @doc """
+  Weighted ratio. Not implemented yet
   """
-  def weighted_ratio do
-    :not_implemented
+
+  @spec weighted_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
+  def weighted_ratio(_, _, _) do
+    raise("not_implemented")
   end
 
   @doc """
+  Process a list of strings, finding the best match on a string reference. Not implemented yet
   """
-  def process do
-    :not_implemented
+  @spec process(String.t(), [String.t()], fuzzywuzzy_options()) :: String.t()
+  def process(_, _, _) do
+    raise("not_implemented")
   end
 
   @spec string_normalizer(String.t()) :: [String.t()]
   defp string_normalizer(string), do: String.split(string, ~R/[^[:alnum:]\-]/u, trim: true)
 
-  @spec apply_ratio(String.t(), String.t(), (String.t(), String.t(), ratio_calculator() -> float()), Keyword.t()) ::
+  @spec apply_ratio(
+          String.t(),
+          String.t(),
+          (String.t(), String.t(), ratio_calculator() -> float()),
+          fuzzywuzzy_options()
+        ) ::
           float()
   defp apply_ratio("", _, _, _), do: 0.0
   defp apply_ratio(_, "", _, _), do: 0.0
@@ -294,7 +312,7 @@ defmodule ExFuzzywuzzy do
     Float.round(100 * ratio_fn.(left, right, similarity_fn), precision)
   end
 
-  @spec get_option(Keyword.t(), option()) :: any()
+  @spec get_option(fuzzywuzzy_options(), atom()) :: any()
   defp get_option(options, option) do
     Keyword.get(
       options,
