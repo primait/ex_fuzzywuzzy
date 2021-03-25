@@ -4,9 +4,7 @@ defmodule ExFuzzywuzzy.Similarity.Levenshtein do
   [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
   """
 
-  @behaviour ExFuzzywuzzy.Similarity
-
-  alias ExFuzzywuzzy.Algorithms.PartialMatch
+  alias Levenshtein
 
   @doc """
   The Levenshtein distance is calculated as the minimum number of edits in order to transition from one string to the other
@@ -14,10 +12,7 @@ defmodule ExFuzzywuzzy.Similarity.Levenshtein do
   """
   @spec calculate(String.t(), String.t()) :: float()
   def calculate(left, right) do
-    left
-    |> PartialMatch.matching_blocks(right)
-    |> Enum.map(& &1.length)
-    |> Enum.sum()
-    |> (fn matches -> 2 * matches / (length(String.graphemes(left)) + length(String.graphemes(right))) end).()
+    distance = Levenshtein.distance(left, right)
+    1 - distance / (length(String.graphemes(left)) + length(String.graphemes(right)))
   end
 end

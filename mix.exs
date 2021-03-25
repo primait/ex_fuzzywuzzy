@@ -39,7 +39,9 @@ defmodule ExFuzzywuzzy.MixProject do
   end
 
   defp deps do
-    [] ++ deps_dev()
+    [
+      {:levenshtein, "~> 0.3.0"}
+    ] ++ deps_dev()
   end
 
   defp deps_dev() do
