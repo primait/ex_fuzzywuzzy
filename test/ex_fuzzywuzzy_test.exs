@@ -7,6 +7,7 @@ defmodule ExFuzzywuzzyTest do
 
   test "standard ratio full match" do
     assert ratio("new york mets", "new york mets", case_sensitive: true) == 100.0
+    assert ratio("new york mets", "new YORK mets", case_sensitive: true, precision: 0) == 69.0
 
     assert ratio("new york mets", "new york mets",
              case_sensitive: true,
@@ -45,6 +46,7 @@ defmodule ExFuzzywuzzyTest do
 
   test "partial ratio" do
     assert partial_ratio("the wonderful new york mets", "new YORK mets", case_sensitive: false) == 100.0
+    assert partial_ratio("the wonderful new york mets", "new YORK mets", case_sensitive: true) == 69.23
   end
 
   test "token sort ratio" do

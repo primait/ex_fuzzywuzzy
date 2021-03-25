@@ -12,7 +12,7 @@ defmodule ExFuzzywuzzy do
   }
   """
 
-  import ExFuzzywuzzy.Algorithms.PartialMatch
+  alias ExFuzzywuzzy.Algorithms.PartialMatch
 
   @typedoc """
   Ratio calculator-like signature
@@ -106,8 +106,10 @@ defmodule ExFuzzywuzzy do
   @spec do_partial_ratio(String.t(), String.t(), ratio_calculator()) :: float()
   defp do_partial_ratio(left, right, ratio_fn) do
     left
-    |> matching_blocks(right)
-    |> Enum.map(fn {left_candidate, right_candidate} -> ratio_fn.(left_candidate, right_candidate) end)
+    |> PartialMatch.matching_blocks(right)
+    |> Enum.map(fn %PartialMatch{left_block: left_candidate, right_block: right_candidate} ->
+      ratio_fn.(left_candidate, right_candidate)
+    end)
     |> Enum.max()
   end
 
@@ -120,7 +122,7 @@ defmodule ExFuzzywuzzy do
   100.0
 
   iex> token_sort_ratio("fuzzy muzzy was a bear", "wuzzy fuzzy was a bear")
-  79.55
+  77.27
   ```
   """
   @spec token_sort_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
@@ -151,7 +153,7 @@ defmodule ExFuzzywuzzy do
   100.0
 
   iex> partial_token_sort_ratio("fuzzy was a bear", "fuzzy fuzzy was a bear")
-  90.63
+  81.25
   ```
   """
   @spec partial_token_sort_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
@@ -174,7 +176,7 @@ defmodule ExFuzzywuzzy do
   100.0
 
   iex> token_set_ratio("fuzzy was a bear", "muzzy wuzzy was a bear")
-  81.58
+  78.95
   ```
   """
   @spec token_set_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
@@ -231,7 +233,7 @@ defmodule ExFuzzywuzzy do
   100.0
 
   iex> partial_token_set_ratio("grizzly was a bear", "be what you wear")
-  65.63
+  43.75
   ```
   """
   @spec partial_token_set_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
