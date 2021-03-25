@@ -216,14 +216,13 @@ defmodule ExFuzzywuzzy do
 
   @spec token_set_diff(MapSet.t(), MapSet.t(), String.t()) :: String.t()
   defp token_set_diff(left, right, prefix) do
-    left
-    |> MapSet.difference(right)
-    |> Enum.sort()
-    |> Enum.join(" ")
-    |> (fn body ->
-          Enum.join([prefix, body], " ")
-        end).()
-    |> String.trim()
+    body =
+      left
+      |> MapSet.difference(right)
+      |> Enum.sort()
+      |> Enum.join(" ")
+
+    String.trim(prefix <> " " <> body)
   end
 
   @doc """
