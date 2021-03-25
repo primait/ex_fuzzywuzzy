@@ -306,8 +306,9 @@ defmodule ExFuzzywuzzy do
 
   defp apply_ratio(left, right, ratio_fn, options) do
     {left, right} =
-      unless get_option(options, :case_sensitive),
-        do: {String.upcase(left), String.upcase(right)}
+      if get_option(options, :case_sensitive),
+        do: {left, right},
+        else: {String.upcase(left), String.upcase(right)}
 
     similarity_fn = get_option(options, :similarity_fn)
     precision = get_option(options, :precision)
