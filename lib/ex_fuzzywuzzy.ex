@@ -214,14 +214,13 @@ defmodule ExFuzzywuzzy do
 
   @spec token_set_diff(MapSet.t(), MapSet.t(), String.t()) :: String.t()
   defp token_set_diff(left, right, prefix) do
-    left
-    |> MapSet.difference(right)
-    |> Enum.sort()
-    |> Enum.join(" ")
-    |> (fn body ->
-          Enum.join([prefix, body], " ")
-        end).()
-    |> String.trim()
+    body =
+      left
+      |> MapSet.difference(right)
+      |> Enum.sort()
+      |> Enum.join(" ")
+
+    String.trim(prefix <> " " <> body)
   end
 
   @doc """
@@ -277,7 +276,7 @@ defmodule ExFuzzywuzzy do
 
   @spec weighted_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def weighted_ratio(_, _, _) do
-    raise("not_implemented")
+    raise "not_implemented"
   end
 
   @doc """
@@ -285,7 +284,7 @@ defmodule ExFuzzywuzzy do
   """
   @spec process(String.t(), [String.t()], fuzzywuzzy_options()) :: String.t()
   def process(_, _, _) do
-    raise("not_implemented")
+    raise "not_implemented"
   end
 
   @spec string_normalizer(String.t()) :: [String.t()]
@@ -304,8 +303,9 @@ defmodule ExFuzzywuzzy do
 
   defp apply_ratio(left, right, ratio_fn, options) do
     {left, right} =
-      unless get_option(options, :case_sensitive),
-        do: {String.upcase(left), String.upcase(right)}
+      if get_option(options, :case_sensitive),
+        do: {left, right},
+        else: {String.upcase(left), String.upcase(right)}
 
     similarity_fn = get_option(options, :similarity_fn)
     precision = get_option(options, :precision)
