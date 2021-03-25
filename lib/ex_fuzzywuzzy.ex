@@ -279,7 +279,7 @@ defmodule ExFuzzywuzzy do
 
   @spec weighted_ratio(String.t(), String.t(), fuzzywuzzy_options()) :: float()
   def weighted_ratio(_, _, _) do
-    raise("not_implemented")
+    raise "not_implemented"
   end
 
   @doc """
@@ -287,7 +287,7 @@ defmodule ExFuzzywuzzy do
   """
   @spec process(String.t(), [String.t()], fuzzywuzzy_options()) :: String.t()
   def process(_, _, _) do
-    raise("not_implemented")
+    raise "not_implemented"
   end
 
   @spec string_normalizer(String.t()) :: [String.t()]
