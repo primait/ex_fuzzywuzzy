@@ -46,6 +46,27 @@ defmodule ExFuzzywuzzy.Test do
              length: 7
            }
 
+    assert LongestCommonSubstring.lcs("stringX", "stringY") == %LongestCommonSubstring{
+             substring: "string",
+             left_starting_index: 0,
+             right_starting_index: 0,
+             length: 6
+           }
+
+    assert LongestCommonSubstring.lcs("stringX", "Ystring") == %LongestCommonSubstring{
+             substring: "string",
+             left_starting_index: 0,
+             right_starting_index: 1,
+             length: 6
+           }
+
+    assert LongestCommonSubstring.lcs("Xstring", "Ystring") == %LongestCommonSubstring{
+             substring: "string",
+             left_starting_index: 1,
+             right_starting_index: 1,
+             length: 6
+           }
+
     assert is_nil(LongestCommonSubstring.lcs("bbbbbb", "aaaaaa"))
   end
 end
