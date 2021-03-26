@@ -1,6 +1,6 @@
 defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
   @moduledoc """
-  Helper module for the application of the longest common substring algorithm between two strings
+  Helper module for the calculus of the longest common substring algorithm between two strings
   """
 
   defstruct [:substring, :left_starting_index, :right_starting_index, :length]
@@ -15,10 +15,15 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
           length: non_neg_integer()
         }
 
+  @typep grapheme :: String.t()
+  @typep row :: map()
+  @typep match :: {integer(), integer(), integer()}
+  @typep longest_match :: {{row(), row()}, match()}
+
   @doc """
   Calculates the longest common substring between two strings, returning a tuple containing
   the matched substring, the length of the substring itself, the starting index of the matches
-  on the left and on the right
+  on the left and on the right.
   """
   @spec lcs(String.t(), String.t()) :: nil | t()
   def lcs(left, right) do
@@ -29,6 +34,7 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
     build_result(left, acc)
   end
 
+  @spec lcs_dynamic_programming([grapheme()], [grapheme()]) :: longest_match()
   defp lcs_dynamic_programming(left, right) do
     Enum.reduce(left, {{%{}, %{}}, {0, 0, 0}}, fn x, acc ->
       {{_, current}, lcs} = Enum.reduce(right, acc, &step(x, &1, &2))
@@ -36,6 +42,7 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
     end)
   end
 
+  @spec step({integer(), integer()}, {integer(), integer()}, longest_match()) :: longest_match()
   defp step({c, i}, {c, j}, {{old, current}, match = {_, _, lcs_len}}) do
     len = Map.get(old, j - 1, 0) + 1
     current = Map.put(current, j, len)
@@ -45,6 +52,7 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
 
   defp step(_, _, acc), do: acc
 
+  @spec build_result(String.t(), longest_match()) :: nil | t()
   defp build_result(_, {_, {_, _, 0}}), do: nil
 
   defp build_result(left, {_, {left_start, right_start, length}}) do
