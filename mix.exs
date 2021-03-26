@@ -25,9 +25,7 @@ defmodule ExFuzzywuzzy.MixProject do
   end
 
   def application do
-    [
-      extra_applications: [:logger]
-    ]
+    []
   end
 
   defp package do
@@ -39,10 +37,6 @@ defmodule ExFuzzywuzzy.MixProject do
   end
 
   defp deps do
-    [] ++ deps_dev()
-  end
-
-  defp deps_dev() do
     [
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
