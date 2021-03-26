@@ -42,6 +42,7 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
     end)
   end
 
+  @spec step({integer(), integer()}, {integer(), integer()}, longest_match()) :: longest_match()
   defp step({c, i}, {c, j}, {{previous, current}, match = {_, _, lcs_length}}) do
     length = Map.get(previous, j - 1, 0) + 1
     current = Map.put(current, j, length)
@@ -51,6 +52,7 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
 
   defp step(_, _, acc), do: acc
 
+  @spec build_result(String.t(), match()) :: nil | t()
   defp build_result(_, {_, _, 0}), do: nil
 
   defp build_result(left, {left_start, right_start, length}) do
