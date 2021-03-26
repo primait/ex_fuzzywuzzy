@@ -25,8 +25,8 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
     left_list = left |> String.graphemes() |> Enum.with_index()
     right_list = right |> String.graphemes() |> Enum.with_index()
 
-    acc = lcs_dynamic_programming(left_list, right_list)
-    build_result(left, acc)
+    {_, match} = lcs_dynamic_programming(left_list, right_list)
+    build_result(left, match)
   end
 
   defp lcs_dynamic_programming(left, right) do
@@ -36,18 +36,18 @@ defmodule ExFuzzywuzzy.Algorithms.LongestCommonSubstring do
     end)
   end
 
-  defp step({c, i}, {c, j}, {{old, current}, match = {_, _, lcs_len}}) do
-    len = Map.get(old, j - 1, 0) + 1
-    current = Map.put(current, j, len)
-    match = if len > lcs_len, do: {i - len + 1, j - len + 1, len}, else: match
-    {{old, current}, match}
+  defp step({c, i}, {c, j}, {{previous, current}, match = {_, _, lcs_length}}) do
+    length = Map.get(previous, j - 1, 0) + 1
+    current = Map.put(current, j, length)
+    match = if length > lcs_length, do: {i - length + 1, j - length + 1, length}, else: match
+    {{previous, current}, match}
   end
 
   defp step(_, _, acc), do: acc
 
-  defp build_result(_, {_, {_, _, 0}}), do: nil
+  defp build_result(_, {_, _, 0}), do: nil
 
-  defp build_result(left, {_, {left_start, right_start, length}}) do
+  defp build_result(left, {left_start, right_start, length}) do
     %__MODULE__{
       substring: String.slice(left, left_start, length),
       left_starting_index: left_start,
