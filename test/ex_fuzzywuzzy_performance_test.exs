@@ -13,7 +13,8 @@ defmodule ExFuzzywuzzyPerformanceTest do
 
     assert ratio(left, left) == 100.0
     assert ratio(right, right) == 100.0
-    assert ratio(left, right) < 40.0
+    # a bit slow, maybe improve underlying implementation
+    assert ratio(left, right) < 10.0
   end
 
   test "jaro-winkler performance match" do
