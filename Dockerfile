@@ -1,5 +1,9 @@
-FROM elixir:1.11.3
+FROM public.ecr.aws/prima/elixir:1.11.2-1
 
 WORKDIR /code
 
-ENTRYPOINT ["/code/entrypoint"]
+USER app
+
+COPY ["entrypoint", "/entrypoint"]
+
+ENTRYPOINT ["/entrypoint"]
