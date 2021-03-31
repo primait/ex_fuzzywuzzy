@@ -18,7 +18,7 @@ To install ExFuzzyWuzzy, just add an entry to your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_fuzzywuzzy, "~> 0.1.0"}
+    {:ex_fuzzywuzzy, "~> 0.2.0"}
   ]
 end
 ```
