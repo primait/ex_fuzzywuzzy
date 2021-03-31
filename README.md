@@ -6,9 +6,6 @@
 [![License](https://img.shields.io/hexpm/l/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
 [![Last Updated](https://img.shields.io/github/last-commit/primait/ex_fuzzywuzzy.svg)](https://github.com/primait/ex_fuzzywuzzy/commits/master)
 
-- [ ] _**TODO: Update badges**_
-- [ ] _**TODO: Publish**_
-
 ExFuzzyWuzzy is a fuzzy string matching library that provides many ways of calculating
 a matching ratio between two strings, starting from a similarity function which can be
 based on Levenshtein or Jaro-Winkler or a custom one.
