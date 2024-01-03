@@ -18,7 +18,6 @@ defmodule ExFuzzywuzzy.MixProject do
       description: "A fuzzy string matching library",
       dialyzer: [
         plt_add_apps: [:mix],
-        plt_add_deps: :transitive,
         ignore_warnings: ".dialyzerignore"
       ]
     ]
