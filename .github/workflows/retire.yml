@@ -1,0 +1,38 @@
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: Retire reason
+        required: true
+        default: invalid
+        type: choice
+        options:
+          - renamed
+          - deprecated
+          - security
+          - invalid
+          - other
+      message:
+        description: Retire message
+        required: true
+        default: Version has a breaking bug
+        type: string
+      version:
+        description: Version to retire
+        required: true
+        default: x.y.z
+        type: string
+
+jobs:
+  retire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: '24'
+          elixir-version: '1.13'
+      - run: echo "Attempting to retire version ${{ inputs.version }}"
+      - run: mix hex.config api_key ${{ secrets.HEX_AUTH_KEY }}
+      - run: mix hex.user whoami
+      - run: mix hex.retire bridge_ex "${{ inputs.version }}" "${{ inputs.reason }}" --message "${{ inputs.message }}"
