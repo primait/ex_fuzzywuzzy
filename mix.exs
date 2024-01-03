@@ -2,13 +2,13 @@ defmodule ExFuzzywuzzy.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/primait/ex_fuzzywuzzy"
-  @version "0.2.0"
+  @version "0.3.0"
 
   def project do
     [
       app: :ex_fuzzywuzzy,
       version: @version,
-      elixir: "~> 1.4",
+      elixir: "~> 1.12",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
