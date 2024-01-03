@@ -77,4 +77,4 @@ Thank your for considering helping with this project. Please see
 `CONTRIBUTING.md` file for contributing to this project.
 
 ## License
-MIT License. Copyright (c) 2015-2021 Prima.it
+MIT License. Copyright (c) 2015-2024 Prima.it
