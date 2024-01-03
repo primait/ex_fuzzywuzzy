@@ -1,5 +1,4 @@
 # ExFuzzywuzzy
-[![Build Status](https://drone-1.prima.it/api/badges/primait/ex_fuzzywuzzy/status.svg)](https://drone-1.prima.it/primait/ex_fuzzywuzzy)
 [![Module Version](https://img.shields.io/hexpm/v/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ex_fuzzywuzzy/)
 [![Total Download](https://img.shields.io/hexpm/dt/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
