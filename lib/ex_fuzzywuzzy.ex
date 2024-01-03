@@ -4,12 +4,7 @@ defmodule ExFuzzywuzzy do
   ex_fuzzywuzzy is a fuzzy string matching library that uses a customizable measure
   to calculate a distance ratio
 
-  #{
-    readme
-    |> File.read!()
-    |> String.split("<!--MDOC !-->")
-    |> Enum.fetch!(1)
-  }
+  #{readme |> File.read!() |> String.split("<!--MDOC !-->") |> Enum.fetch!(1)}
   """
 
   alias ExFuzzywuzzy.Algorithms.PartialMatch
