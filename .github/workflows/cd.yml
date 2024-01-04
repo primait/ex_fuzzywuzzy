@@ -5,6 +5,10 @@ on:
     types: [published]
 
 jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
   release:
     runs-on: ubuntu-latest
     steps:
@@ -35,3 +39,5 @@ jobs:
           mix hex.config api_key ${{ secrets.HEX_AUTH_KEY }}
       - name: Publish
         run: mix hex.publish --yes
+    needs:
+      - ci
