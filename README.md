@@ -1,9 +1,10 @@
 # ExFuzzywuzzy
+[![CI](https://github.com/primait/ex_fuzzywuzzy/actions/workflows/ci.yml/badge.svg)](https://github.com/primait/ex_fuzzywuzzy/actions/workflows/ci.yml)
 [![Module Version](https://img.shields.io/hexpm/v/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ex_fuzzywuzzy/)
 [![Total Download](https://img.shields.io/hexpm/dt/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
 [![License](https://img.shields.io/hexpm/l/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
-[![Last Updated](https://img.shields.io/github/last-commit/primait/ex_fuzzywuzzy.svg)](https://github.com/primait/ex_fuzzywuzzy/commits/master)
+[![Last Updated](https://img.shields.io/github/last-commit/primait/ex_fuzzywuzzy/master)](https://github.com/primait/ex_fuzzywuzzy/commits/master)
 
 ExFuzzyWuzzy is a fuzzy string matching library that provides many ways of calculating
 a matching ratio between two strings, starting from a similarity function which can be
