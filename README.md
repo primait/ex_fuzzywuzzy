@@ -1,5 +1,4 @@
 # ExFuzzywuzzy
-[![Build Status](https://drone-1.prima.it/api/badges/primait/ex_fuzzywuzzy/status.svg)](https://drone-1.prima.it/primait/ex_fuzzywuzzy)
 [![Module Version](https://img.shields.io/hexpm/v/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ex_fuzzywuzzy/)
 [![Total Download](https://img.shields.io/hexpm/dt/ex_fuzzywuzzy.svg)](https://hex.pm/packages/ex_fuzzywuzzy)
@@ -18,7 +17,7 @@ To install ExFuzzyWuzzy, just add an entry to your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_fuzzywuzzy, "~> 0.2.0"}
+    {:ex_fuzzywuzzy, "~> 0.3.0"}
   ]
 end
 ```
@@ -77,4 +76,4 @@ Thank your for considering helping with this project. Please see
 `CONTRIBUTING.md` file for contributing to this project.
 
 ## License
-MIT License. Copyright (c) 2015-2021 Prima.it
+MIT License. Copyright (c) 2015-2024 Prima.it

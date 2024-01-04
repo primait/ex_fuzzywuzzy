@@ -18,6 +18,6 @@ defmodule ExFuzzywuzzy.Similarity.Levenshtein do
     |> PartialMatch.matching_blocks(right)
     |> Enum.map(& &1.length)
     |> Enum.sum()
-    |> (fn matches -> 2 * matches / (length(String.graphemes(left)) + length(String.graphemes(right))) end).()
+    |> then(fn matches -> 2 * matches / (length(String.graphemes(left)) + length(String.graphemes(right))) end)
   end
 end
