@@ -35,4 +35,4 @@ jobs:
       - run: echo "Attempting to retire version ${{ inputs.version }}"
       - run: mix hex.config api_key ${{ secrets.HEX_AUTH_KEY }}
       - run: mix hex.user whoami
-      - run: mix hex.retire bridge_ex "${{ inputs.version }}" "${{ inputs.reason }}" --message "${{ inputs.message }}"
+      - run: mix hex.retire ex_fuzzywuzzy "${{ inputs.version }}" "${{ inputs.reason }}" --message "${{ inputs.message }}"
