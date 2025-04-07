@@ -1,0 +1,12 @@
+name: Clear S3 cache
+
+on:
+  workflow_dispatch:
+    {}
+  delete:
+    branches:
+      - "*"
+
+jobs:
+  cleanup-s3-cache:
+    uses: primait/shared-github-actions/.github/workflows/clean-s3-cache.yml@cleanup-cache-v1
