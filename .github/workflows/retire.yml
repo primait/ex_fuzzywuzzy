@@ -50,6 +50,12 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Validate message input
         run: |
+          # Check message length (max 140 characters)
+          if [ ${#MESSAGE} -gt 140 ]; then
+            echo "Error: Message must not be longer than 140 characters (current: ${#MESSAGE})"
+            exit 1
+          fi
+          
           # Check message contains only letters, numbers, spaces and periods
           if ! echo "$MESSAGE" | grep -E '^[a-zA-Z0-9 .]+$'; then
             echo "Error: Message must contain only letters, numbers, spaces, and periods"
