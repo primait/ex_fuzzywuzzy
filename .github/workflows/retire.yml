@@ -23,46 +23,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check if launched from a tag
-        run: |
-          if [ -z "$GITHUB_REF_NAME" ] || [ "$GITHUB_REF_TYPE" != "tag" ]; then
-            echo "Error: This workflow must be launched from a tag"
-            echo "Current ref type: $GITHUB_REF_TYPE"
-            echo "Current ref name: $GITHUB_REF_NAME"
-            exit 1
-          fi
-          echo "Workflow launched from tag: $GITHUB_REF_NAME"
       - name: Extract version from tag
         id: extract_version
         run: |
-          TAG_NAME="$GITHUB_REF_NAME"
-          echo "Tag name: $TAG_NAME"
-          
-          VERSION="$TAG_NAME"
           echo "Version: $VERSION"
           
-          # Validate semantic versioning format
-          if ! echo "$VERSION" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-            echo "Error: Tag must follow semantic versioning format (1.2.3)"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "The workflow must be run from a tag that follows semantic versioning format (1.2.3)"
             exit 1
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+        env:
+          VERSION: ${{ github.ref_name }}
       - name: Validate message input
         run: |
           # Check message length (max 140 characters)
-          if [ ${#MESSAGE} -gt 140 ]; then
-            echo "Error: Message must not be longer than 140 characters (current: ${#MESSAGE})"
+          if [ "$MESSAGE" -gt 140 ]; then
+            echo "Error: Message must not be longer than 140 characters"
             exit 1
           fi
           
           # Check message contains only letters, numbers, spaces and periods
-          if ! echo "$MESSAGE" | grep -E '^[a-zA-Z0-9 .]+$'; then
+          if [[ ! "$MESSAGE" =~ ^[a-zA-Z0-9\.\ ]+$ ]]; then
             echo "Error: Message must contain only letters, numbers, spaces, and periods"
-            echo "Invalid message: $MESSAGE"
             exit 1
           fi
-          echo "Message validation passed"
         env:
           MESSAGE: ${{ inputs.message }}
       - uses: erlef/setup-beam@v1
