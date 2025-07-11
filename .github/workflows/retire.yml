@@ -17,22 +17,64 @@ on:
         required: true
         default: Version has a breaking bug
         type: string
-      version:
-        description: Version to retire
-        required: true
-        default: x.y.z
-        type: string
 
 jobs:
   retire:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check if launched from a tag
+        run: |
+          if [ -z "$GITHUB_REF_NAME" ] || [ "$GITHUB_REF_TYPE" != "tag" ]; then
+            echo "Error: This workflow must be launched from a tag"
+            echo "Current ref type: $GITHUB_REF_TYPE"
+            echo "Current ref name: $GITHUB_REF_NAME"
+            exit 1
+          fi
+          echo "Workflow launched from tag: $GITHUB_REF_NAME"
+      - name: Extract version from tag
+        id: extract_version
+        run: |
+          TAG_NAME="$GITHUB_REF_NAME"
+          echo "Tag name: $TAG_NAME"
+          
+          VERSION="$TAG_NAME"
+          echo "Version: $VERSION"
+          
+          # Validate semantic versioning format
+          if ! echo "$VERSION" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Error: Tag must follow semantic versioning format (1.2.3)"
+            exit 1
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Validate message input
+        run: |
+          # Check message contains only letters, numbers, spaces and periods
+          if ! echo "$MESSAGE" | grep -E '^[a-zA-Z0-9 .]+$'; then
+            echo "Error: Message must contain only letters, numbers, spaces, and periods"
+            echo "Invalid message: $MESSAGE"
+            exit 1
+          fi
+          echo "Message validation passed"
+        env:
+          MESSAGE: ${{ inputs.message }}
       - uses: erlef/setup-beam@v1
         with:
           otp-version: '24'
           elixir-version: '1.13'
-      - run: echo "Attempting to retire version ${{ inputs.version }}"
-      - run: mix hex.config api_key ${{ secrets.HEX_AUTH_KEY }}
+      - name: Display retirement info
+        run: echo "Attempting to retire version $VERSION"
+        env:
+          VERSION: ${{ steps.extract_version.outputs.version }}
+      - name: Configure Hex API key
+        run: mix hex.config api_key "$HEX_API_KEY"
+        env:
+          HEX_API_KEY: ${{ secrets.HEX_AUTH_KEY }}
       - run: mix hex.user whoami
-      - run: mix hex.retire ex_fuzzywuzzy "${{ inputs.version }}" "${{ inputs.reason }}" --message "${{ inputs.message }}"
+      - name: Retire package version
+        run: mix hex.retire ex_fuzzywuzzy "$VERSION" "$REASON" --message "$MESSAGE"
+        env:
+          VERSION: ${{ steps.extract_version.outputs.version }}
+          REASON: ${{ inputs.reason }}
+          MESSAGE: ${{ inputs.message }}
