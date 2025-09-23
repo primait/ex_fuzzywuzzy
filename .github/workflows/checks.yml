@@ -1,0 +1,14 @@
+name: Pull Request Checks
+on:
+  pull_request:
+jobs:
+  checks:
+    runs-on: k8s-small
+    permissions:
+      checks: read
+    steps:
+      - name: GitHub Checks
+        uses: primait/shared-github-actions/actions/wait-for-status-checks@wait-for-status-checks-v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ignore: "CodeScene Cloud Delta Analysis (master), GitLeaks Scan, Semgrep Scan"
