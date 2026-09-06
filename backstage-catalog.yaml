@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "ex_fuzzywuzzy"
+  description: "ExFuzzyWuzzy is a fuzzy string matching library"
+spec:
+  type: "library"
+  lifecycle: production
+  owner: "group:default/team-apollo"
+  system: prima.it
