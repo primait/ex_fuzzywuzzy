@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: fuzzywuzzy
+  description: Utilities for fuzzy string matching
+  tags: []
+spec:
+  type: tool
+  lifecycle: experimental
+  owner: team-uw-processes
+  system: prima.it
